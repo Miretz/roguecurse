@@ -10,17 +10,14 @@ class Player:
         "right": (1, 0)
     }
 
-    def __init__(self, arena, arena_width, arena_height):
+    def __init__(self, arena_width, arena_height):
         super().__init__()
-        self.arena = arena
         self.arena_width = arena_width
         self.arena_height = arena_height
         self.coords = (1, 1)
-        txt = urwid.Text(('banner', u"P"), align='center')
+        txt = urwid.Text(('player', u"P"), align='center')
         map1 = urwid.AttrMap(txt, 'streak')
         self.fill = urwid.Filler(map1)
-        self.sprite = urwid.Overlay(
-            self.fill, self.arena, 'left', 1, 'top', 1, left=self.coords[0], top=self.coords[1])
 
     def move(self, direction):
         change = Player.directions.get(direction, (0, 0))
@@ -28,7 +25,6 @@ class Player:
         y = max(1, min(self.arena_height-1, self.coords[1] + change[1]))
         self.coords = (x, y)
 
-    def render(self):
-        self.sprite = urwid.Overlay(
-            self.fill, self.arena, 'left', 1, 'top', 1, left=self.coords[0], top=self.coords[1])
-        return self.sprite
+    def render(self, arena):
+        return urwid.Overlay(
+            self.fill, arena, 'left', 1, 'top', 1, left=self.coords[0], top=self.coords[1])
